@@ -1,6 +1,8 @@
 package main
 
 import (
+	"be-assignment/config"
+	"be-assignment/helper"
 	"be-assignment/routes"
 	"log"
 	"os"
@@ -16,6 +18,13 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
+
+	// Handle DB Connection
+	db, err := config.ConnectDB()
+	helper.ErrorPanic(err)
+
+	defer db.Prisma.Disconnect()
+
 	// initialize supertokens
 	err = supertokens.Init(supertokens.TypeInput{
 		Supertokens: &supertokens.ConnectionInfo{
