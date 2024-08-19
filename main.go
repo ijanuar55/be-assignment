@@ -2,8 +2,11 @@ package main
 
 import (
 	"be-assignment/config"
+	"be-assignment/controller"
 	"be-assignment/helper"
+	"be-assignment/repository"
 	"be-assignment/routes"
+	"be-assignment/service"
 	"log"
 	"os"
 
@@ -25,6 +28,18 @@ func main() {
 
 	defer db.Prisma.Disconnect()
 
+	// repository
+	userRepository := repository.NewUserRepository(db)
+	accountRepository := repository.NewAccountRepository(db)
+
+	// service
+	userService := service.NewUserServiceImpl(userRepository)
+	accountService := service.NewAccountServiceImpl(accountRepository)
+
+	// controller
+	userController := controller.NewUserController(userService)
+	accountController := controller.NewAccountController(accountService, userService)
+
 	// initialize supertokens
 	err = supertokens.Init(supertokens.TypeInput{
 		Supertokens: &supertokens.ConnectionInfo{
@@ -45,7 +60,7 @@ func main() {
 		log.Fatalf("Could not initialize SuperTokens: %v", err)
 	}
 
-	r := routes.Router()
+	r := routes.Router(userController, accountController)
 
 	r.Run()
 }

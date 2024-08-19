@@ -1,33 +1,25 @@
 package routes
 
 import (
-	"be-assignment/handlers"
+	"be-assignment/controller"
 	"be-assignment/middleware"
 
 	"github.com/gin-gonic/gin"
-	"github.com/supertokens/supertokens-golang/recipe/session/sessmodels"
 )
 
-func Router() *gin.Engine {
+func Router(user *controller.UserController, account *controller.AccountController) *gin.Engine {
 	r := gin.Default()
 
-	// // Define routes and use handler functions
-	// r.GET("/ping", handlers.PingHandler)
-
 	api := r.Group("/api")
+	api.Use(middleware.AuthenticateJWT())
 	{
-		// Protected route example
-		sessionRequired := false
-		api.GET("/user/:email", middleware.VerifySession(&sessmodels.VerifySessionOptions{
-			SessionRequired: &sessionRequired,
-		}), handlers.GetEmail)
+		api.GET("/user/:email", user.GetEmail)
+		api.GET("/account/:userId", account.FindByUserId)
+		api.POST("/account", account.Create)
 	}
 
-	// Add SuperTokens API routes
-	r.POST("/auth/signup", handlers.EmailPasswordSignUp)
-	r.POST("/auth/login", handlers.EmailPasswordSignIn)
-	// r.POST("/auth/refresh", session.RefreshSession)
-	// r.POST("/auth/logout", session.RevokeSession)
+	r.POST("/auth/signup", user.Create)
+	r.POST("/auth/login", user.Login)
 
 	return r
 }

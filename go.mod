@@ -4,8 +4,8 @@ go 1.22.4
 
 require (
 	github.com/gin-gonic/gin v1.10.0
-	github.com/google/martian/v3 v3.3.3
 	github.com/joho/godotenv v1.5.1
+	github.com/rs/zerolog v1.33.0
 	github.com/shopspring/decimal v1.4.0
 	github.com/steebchen/prisma-client-go v0.38.0
 	github.com/supertokens/supertokens-golang v0.24.1
@@ -25,6 +25,7 @@ require (
 	github.com/go-playground/validator/v10 v10.22.0 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
 	github.com/golang-jwt/jwt/v5 v5.0.0 // indirect
+	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/h2non/parth v0.0.0-20190131123155-b4df798d6542 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
@@ -37,7 +38,6 @@ require (
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.8.0 // indirect
-	github.com/rs/zerolog v1.33.0 // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.12 // indirect
