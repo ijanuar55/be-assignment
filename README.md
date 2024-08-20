@@ -6,4 +6,5 @@
     ```sh
     go mod download
 2. Run Docker:
-   docker-compose up
+    ```sh
+   docker-compose up -d
