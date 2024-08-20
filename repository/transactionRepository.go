@@ -39,7 +39,7 @@ func (t *TransactionRepositoryImpl) FindById(ctx context.Context, trxId string) 
 // FindByAccountNumber implements TransactionRepository.
 func (t *TransactionRepositoryImpl) FindByAccountNumber(ctx context.Context, accountNumber string) ([]entity.Transaction, error) {
 	var transactions []entity.Transaction
-	trx, err := t.DB.Transaction.FindMany(db.Transaction.FromAccount.Equals(accountNumber)).Exec(ctx)
+	trx, err := t.DB.Transaction.FindMany(db.Transaction.Or(db.Transaction.FromAccount.Equals(accountNumber), db.Transaction.ToAccount.Equals(accountNumber))).Exec(ctx)
 	if err != nil {
 		return transactions, err
 	}

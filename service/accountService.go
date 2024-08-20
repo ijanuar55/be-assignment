@@ -64,3 +64,28 @@ func (a *AccountServiceImpl) FindByUserId(ctx context.Context, userId string) ([
 
 	return accounts, nil
 }
+
+func (a *AccountServiceImpl) FindByAccountNumber(ctx context.Context, accountNumber string) (*entity.Account, error) {
+	account, err := a.AccountRepository.FindByAccountNumber(ctx, accountNumber)
+	if err != nil {
+		return nil, err
+	}
+	return &entity.Account{
+		Id:            account.Id,
+		UserId:        account.UserId,
+		Type:          account.Type,
+		Balance:       account.Balance,
+		AccountNumber: account.AccountNumber,
+	}, nil
+}
+
+func (a *AccountServiceImpl) Update(ctx context.Context, req entity.Account) error {
+	err := a.AccountRepository.Update(ctx, entity.Account{
+		Id:      req.Id,
+		Balance: req.Balance,
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}

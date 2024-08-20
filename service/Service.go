@@ -14,11 +14,14 @@ type UserService interface {
 
 type AccountService interface {
 	Create(ctx context.Context, req entity.Account) error
+	Update(ctx context.Context, req entity.Account) error
 	FindByUserId(ctx context.Context, userId string) ([]entity.Account, error)
 	FindById(ctx context.Context, accountId string) (*entity.Account, error)
+	FindByAccountNumber(ctx context.Context, accountNumber string) (*entity.Account, error)
 }
 
 type TransactionService interface {
-	Send(ctx context.Context, fromAccount, toAccount string, amount float64) error
-	withdraw(ctx context.Context, accountNumber string, amount float64) error
+	Create(ctx context.Context, req entity.Transaction) error
+	FindById(ctx context.Context, trxId string) (*entity.Transaction, error)
+	FindByAccountNumber(ctx context.Context, accountNumber string) ([]entity.Transaction, error)
 }

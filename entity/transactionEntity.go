@@ -1,8 +1,8 @@
 package entity
 
 type Transaction struct {
-	Id          string
-	FromAccount string
-	ToAccount   string
-	Amount      float64
+	Id          string  `json:"id"`
+	FromAccount string  `json:"from_account"`
+	ToAccount   string  `json:"to_account"`
+	Amount      float64 `json:"amount"`
 }

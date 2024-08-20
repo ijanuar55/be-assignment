@@ -60,6 +60,7 @@ func AuthenticateJWT() gin.HandlerFunc {
 
 		// Access claims data
 		c.Set("email", claims.Email)
+		c.Set("user_id", claims.UserId)
 		c.Next()
 	}
 }

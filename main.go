@@ -31,14 +31,17 @@ func main() {
 	// repository
 	userRepository := repository.NewUserRepository(db)
 	accountRepository := repository.NewAccountRepository(db)
+	transactionRepository := repository.NewTransactionRepository(db)
 
 	// service
 	userService := service.NewUserServiceImpl(userRepository)
 	accountService := service.NewAccountServiceImpl(accountRepository)
+	transactionService := service.NewTransactionServiceImpl(transactionRepository, accountRepository)
 
 	// controller
 	userController := controller.NewUserController(userService)
 	accountController := controller.NewAccountController(accountService, userService)
+	transactionController := controller.NewTransactionController(transactionService, accountService)
 
 	// initialize supertokens
 	err = supertokens.Init(supertokens.TypeInput{
@@ -60,7 +63,7 @@ func main() {
 		log.Fatalf("Could not initialize SuperTokens: %v", err)
 	}
 
-	r := routes.Router(userController, accountController)
+	r := routes.Router(userController, accountController, transactionController)
 
 	r.Run()
 }

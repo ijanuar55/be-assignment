@@ -10,6 +10,9 @@ var (
 	ErrAccountNotFound     = errors.New("account not found")
 	ErrTransactionNotFound = errors.New("transaction not found")
 	ErrInsuficientBalance  = errors.New("insuficient balance")
+	ErrDontHaveAccess      = errors.New("you dont have access")
+	ErrCannotCreateTran    = errors.New("cannot create transaction")
+	ErrCannotUpdateAcc     = errors.New("cannot update account")
 )
 
 func ErrorPanic(err error) {

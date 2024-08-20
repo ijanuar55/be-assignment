@@ -2,7 +2,6 @@ package service
 
 import (
 	"be-assignment/entity"
-	"be-assignment/helper"
 	"be-assignment/repository"
 	"context"
 )
@@ -16,38 +15,51 @@ func NewTransactionServiceImpl(transactionRepository repository.TransactionRepos
 	return &TransactionServiceImpl{TransactionRepository: transactionRepository, AccountRepository: accountRepository}
 }
 
-// Send implements TransactionService.
-func (t *TransactionServiceImpl) Send(ctx context.Context, fromAccount string, toAccount string, amount float64) error {
-	panic("unimplemented")
+// FindByAccountNumber implements TransactionService.
+func (t *TransactionServiceImpl) FindByAccountNumber(ctx context.Context, accountNumber string) ([]entity.Transaction, error) {
+	var transactions []entity.Transaction
+	trx, err := t.TransactionRepository.FindByAccountNumber(ctx, accountNumber)
+	if err != nil {
+		return transactions, err
+	}
+
+	for _, v := range trx {
+		transaction := entity.Transaction{
+			Id:          v.Id,
+			FromAccount: v.FromAccount,
+			ToAccount:   v.ToAccount,
+			Amount:      v.Amount,
+		}
+
+		transactions = append(transactions, transaction)
+	}
+
+	return transactions, nil
 }
 
-// withdraw implements TransactionService.
-func (t *TransactionServiceImpl) withdraw(ctx context.Context, accountNumber string, amount float64) error {
-	account, err := t.AccountRepository.FindByAccountNumber(ctx, accountNumber)
+// FindById implements TransactionService.
+func (t *TransactionServiceImpl) FindById(ctx context.Context, trxId string) (*entity.Transaction, error) {
+	trx, err := t.TransactionRepository.FindById(ctx, trxId)
 	if err != nil {
-		return err
+		return nil, err
 	}
+	return &entity.Transaction{
+		Id:          trx.Id,
+		FromAccount: trx.FromAccount,
+		ToAccount:   trx.ToAccount,
+		Amount:      trx.Amount,
+	}, nil
+}
 
-	if account.Balance < amount {
-		return helper.ErrInsuficientBalance
-	}
-
+// Save implements TransactionService.
+func (t *TransactionServiceImpl) Create(ctx context.Context, req entity.Transaction) error {
 	trxData := entity.Transaction{
-		FromAccount: accountNumber,
-		Amount:      amount,
+		Id:          req.Id,
+		FromAccount: req.FromAccount,
+		ToAccount:   req.ToAccount,
+		Amount:      req.Amount,
 	}
-
-	err = t.TransactionRepository.Save(ctx, trxData)
-	if err != nil {
-		return err
-	}
-
-	accountData := entity.Account{
-		Id:      account.Id,
-		Balance: account.Balance - amount,
-	}
-
-	err = t.AccountRepository.Update(ctx, accountData)
+	err := t.TransactionRepository.Save(ctx, trxData)
 	if err != nil {
 		return err
 	}
